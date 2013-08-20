@@ -1,11 +1,11 @@
 part of xmi;
 
 /// Build a UModel from json representation of XMI
-class JsonUModelBuilder { 
+class JsonUModelBuilder {
   JsonUModelBuilder(
     this.srcJsonFile
   ) {
-  
+
   }
   
   /// Path to json input file
@@ -196,7 +196,7 @@ class JsonUModelBuilder {
 // end <class JsonUModelBuilder>
 }
 
-class UModel { 
+class UModel {
   UPackage root;
   Map<String, dynamic> _itemMap = {};
   /// Map of items indexed by xmi:id
@@ -204,14 +204,80 @@ class UModel {
 
 // custom <class UModel>
 
+  UClass class_(String id) => _itemMap[id];
+  UEnumeration enum_(String id) => _itemMap[id];
+  UComment comment(String id) => _itemMap[id];
+  UDependency dependency(String id) => _itemMap[id];
+  UPackage package(String id) => _itemMap[id];
+  UProfile profile(String id) => _itemMap[id];
+  UStereotype stereotype(String id) => _itemMap[id];
+  UTemplBinding templBinding(String id) => _itemMap[id];
+  UTemplParmSubst templParmSubst(String id) => _itemMap[id];
+  UClassifierTemplParm classifierTemplParm(String id) => _itemMap[id];
+  UTemplSig templSig(String id) => _itemMap[id];
+
+  get classes => _itemMap.values.where((v) => v is UClass);
+  get enums => _itemMap.values.where((v) => v is UEnumeration);
+  get comments => _itemMap.values.where((v) => v is UComment);
+  get packages => _itemMap.values.where((v) => v is UPackage);
+
 // end <class UModel>
+
+  Map toJson() {
+    return {
+    "root": EBISU_UTILS.toJson(root),
+    "itemMap": EBISU_UTILS.toJson(_itemMap),
+    // TODO: "UModel": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "root": EBISU_UTILS.randJson(_randomJsonGenerator, UPackage.randJson),
+    "itemMap":
+       EBISU_UTILS.randJsonMap(_randomJsonGenerator,
+        () => dynamic.randJson(),
+        "itemMap"),
+    };
+  }
+
+
+  static UModel fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UModel result = new UModel();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UModel fromJsonMap(Map jsonMap) {
+    UModel result = new UModel();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    root = (jsonMap["root"] is Map)?
+      UPackage.fromJsonMap(jsonMap["root"]) :
+      UPackage.fromJson(jsonMap["root"]);
+    // itemMap map of <String, dynamic>
+    itemMap = { };
+    jsonMap["itemMap"].forEach((k,v) {
+      _itemMap[k] = dynamic.fromJsonMap(v);
+    });
+  }
 }
 
-class UClass { 
+class UClass {
   UClass(
     this._id
   ) {
+
+  }
   
+  UClass._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -229,13 +295,77 @@ class UClass {
 // custom <class UClass>
 
 // end <class UClass>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "name": EBISU_UTILS.toJson(name),
+    "comment": EBISU_UTILS.toJson(comment),
+    "properties": EBISU_UTILS.toJson(properties),
+    "templBinding": EBISU_UTILS.toJson(templBinding),
+    "templSig": EBISU_UTILS.toJson(templSig),
+    // TODO: "UClass": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "comment": EBISU_UTILS.randJson(_randomJsonGenerator, UComment.randJson),
+    "properties":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UProperty.randJson()),
+    "templBinding": EBISU_UTILS.randJson(_randomJsonGenerator, UTemplBinding.randJson),
+    "templSig": EBISU_UTILS.randJson(_randomJsonGenerator, UTemplSig.randJson),
+    };
+  }
+
+
+  static UClass fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UClass result = new UClass._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UClass fromJsonMap(Map jsonMap) {
+    UClass result = new UClass._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    name = jsonMap["name"];
+    comment = (jsonMap["comment"] is Map)?
+      UComment.fromJsonMap(jsonMap["comment"]) :
+      UComment.fromJson(jsonMap["comment"]);
+    // properties list of UProperty
+    properties = new List<UProperty>();
+    jsonMap["properties"].forEach((v) {
+      properties.add(UProperty.fromJsonMap(v));
+    });
+    templBinding = (jsonMap["templBinding"] is Map)?
+      UTemplBinding.fromJsonMap(jsonMap["templBinding"]) :
+      UTemplBinding.fromJson(jsonMap["templBinding"]);
+    templSig = (jsonMap["templSig"] is Map)?
+      UTemplSig.fromJsonMap(jsonMap["templSig"]) :
+      UTemplSig.fromJson(jsonMap["templSig"]);
+  }
 }
 
-class UComment { 
+class UComment {
   UComment(
     this._id
   ) {
+
+  }
   
+  UComment._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -249,13 +379,53 @@ class UComment {
   String toString() => body;
 
 // end <class UComment>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "body": EBISU_UTILS.toJson(body),
+    // TODO: "UComment": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "body": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    };
+  }
+
+
+  static UComment fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UComment result = new UComment._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UComment fromJsonMap(Map jsonMap) {
+    UComment result = new UComment._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    body = jsonMap["body"];
+  }
 }
 
-class UDependency { 
+class UDependency {
   UDependency(
     this._id
   ) {
+
+  }
   
+  UDependency._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -266,13 +436,56 @@ class UDependency {
 
 // custom <class UDependency>
 // end <class UDependency>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "supplier": EBISU_UTILS.toJson(supplier),
+    "client": EBISU_UTILS.toJson(client),
+    // TODO: "UDependency": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "supplier": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "client": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    };
+  }
+
+
+  static UDependency fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UDependency result = new UDependency._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UDependency fromJsonMap(Map jsonMap) {
+    UDependency result = new UDependency._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    supplier = jsonMap["supplier"];
+    client = jsonMap["client"];
+  }
 }
 
-class UEnumeration { 
+class UEnumeration {
   UEnumeration(
     this._id
   ) {
+
+  }
   
+  UEnumeration._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -287,13 +500,67 @@ class UEnumeration {
 
 // custom <class UEnumeration>
 // end <class UEnumeration>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "name": EBISU_UTILS.toJson(name),
+    "properties": EBISU_UTILS.toJson(properties),
+    "comment": EBISU_UTILS.toJson(comment),
+    // TODO: "UEnumeration": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "properties":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UProperty.randJson()),
+    "comment": EBISU_UTILS.randJson(_randomJsonGenerator, UComment.randJson),
+    };
+  }
+
+
+  static UEnumeration fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UEnumeration result = new UEnumeration._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UEnumeration fromJsonMap(Map jsonMap) {
+    UEnumeration result = new UEnumeration._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    name = jsonMap["name"];
+    // properties list of UProperty
+    properties = new List<UProperty>();
+    jsonMap["properties"].forEach((v) {
+      properties.add(UProperty.fromJsonMap(v));
+    });
+    comment = (jsonMap["comment"] is Map)?
+      UComment.fromJsonMap(jsonMap["comment"]) :
+      UComment.fromJson(jsonMap["comment"]);
+  }
 }
 
-class UPackage { 
+class UPackage {
   UPackage(
     this._id
   ) {
+
+  }
   
+  UPackage._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -313,13 +580,106 @@ class UPackage {
 
 // custom <class UPackage>
 // end <class UPackage>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "name": EBISU_UTILS.toJson(name),
+    "comment": EBISU_UTILS.toJson(comment),
+    "classes": EBISU_UTILS.toJson(classes),
+    "enums": EBISU_UTILS.toJson(enums),
+    "primitiveTypes": EBISU_UTILS.toJson(primitiveTypes),
+    "packages": EBISU_UTILS.toJson(packages),
+    "parentPackageId": EBISU_UTILS.toJson(parentPackageId),
+    "path": EBISU_UTILS.toJson(path),
+    // TODO: "UPackage": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "comment": EBISU_UTILS.randJson(_randomJsonGenerator, UComment.randJson),
+    "classes":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UClass.randJson()),
+    "enums":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UEnumeration.randJson()),
+    "primitiveTypes":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UPrimitiveType.randJson()),
+    "packages":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UPackage.randJson()),
+    "parentPackageId": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "path":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => EBISU_UTILS.randJson(_randomJsonGenerator, String)),
+    };
+  }
+
+
+  static UPackage fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UPackage result = new UPackage._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UPackage fromJsonMap(Map jsonMap) {
+    UPackage result = new UPackage._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    name = jsonMap["name"];
+    comment = (jsonMap["comment"] is Map)?
+      UComment.fromJsonMap(jsonMap["comment"]) :
+      UComment.fromJson(jsonMap["comment"]);
+    // classes list of UClass
+    classes = new List<UClass>();
+    jsonMap["classes"].forEach((v) {
+      classes.add(UClass.fromJsonMap(v));
+    });
+    // enums list of UEnumeration
+    enums = new List<UEnumeration>();
+    jsonMap["enums"].forEach((v) {
+      enums.add(UEnumeration.fromJsonMap(v));
+    });
+    // primitiveTypes list of UPrimitiveType
+    primitiveTypes = new List<UPrimitiveType>();
+    jsonMap["primitiveTypes"].forEach((v) {
+      primitiveTypes.add(UPrimitiveType.fromJsonMap(v));
+    });
+    // packages list of UPackage
+    packages = new List<UPackage>();
+    jsonMap["packages"].forEach((v) {
+      packages.add(UPackage.fromJsonMap(v));
+    });
+    parentPackageId = jsonMap["parentPackageId"];
+    // path list of String
+    path = new List<String>();
+    jsonMap["path"].forEach((v) {
+      path.add(String.fromJsonMap(v));
+    });
+  }
 }
 
-class UPrimitiveType { 
+class UPrimitiveType {
   UPrimitiveType(
     this._id
   ) {
+
+  }
   
+  UPrimitiveType._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -330,13 +690,53 @@ class UPrimitiveType {
 
 // custom <class UPrimitiveType>
 // end <class UPrimitiveType>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "name": EBISU_UTILS.toJson(name),
+    // TODO: "UPrimitiveType": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    };
+  }
+
+
+  static UPrimitiveType fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UPrimitiveType result = new UPrimitiveType._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UPrimitiveType fromJsonMap(Map jsonMap) {
+    UPrimitiveType result = new UPrimitiveType._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    name = jsonMap["name"];
+  }
 }
 
-class UProperty { 
+class UProperty {
   UProperty(
     this._id
   ) {
+
+  }
   
+  UProperty._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -353,13 +753,67 @@ class UProperty {
 
 // custom <class UProperty>
 // end <class UProperty>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "name": EBISU_UTILS.toJson(name),
+    "comment": EBISU_UTILS.toJson(comment),
+    "type": EBISU_UTILS.toJson(type),
+    "visibility": EBISU_UTILS.toJson(visibility),
+    "aggregation": EBISU_UTILS.toJson(aggregation),
+    // TODO: "UProperty": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "comment": EBISU_UTILS.randJson(_randomJsonGenerator, UComment.randJson),
+    "type": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "visibility": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "aggregation": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    };
+  }
+
+
+  static UProperty fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UProperty result = new UProperty._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UProperty fromJsonMap(Map jsonMap) {
+    UProperty result = new UProperty._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    name = jsonMap["name"];
+    comment = (jsonMap["comment"] is Map)?
+      UComment.fromJsonMap(jsonMap["comment"]) :
+      UComment.fromJson(jsonMap["comment"]);
+    type = jsonMap["type"];
+    visibility = jsonMap["visibility"];
+    aggregation = jsonMap["aggregation"];
+  }
 }
 
-class UProfile { 
+class UProfile {
   UProfile(
     this._id
   ) {
+
+  }
   
+  UProfile._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -370,13 +824,53 @@ class UProfile {
 
 // custom <class UProfile>
 // end <class UProfile>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "name": EBISU_UTILS.toJson(name),
+    // TODO: "UProfile": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    };
+  }
+
+
+  static UProfile fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UProfile result = new UProfile._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UProfile fromJsonMap(Map jsonMap) {
+    UProfile result = new UProfile._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    name = jsonMap["name"];
+  }
 }
 
-class UStereotype { 
+class UStereotype {
   UStereotype(
     this._id
   ) {
+
+  }
   
+  UStereotype._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -389,13 +883,62 @@ class UStereotype {
 
 // custom <class UStereotype>
 // end <class UStereotype>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "name": EBISU_UTILS.toJson(name),
+    "properties": EBISU_UTILS.toJson(properties),
+    // TODO: "UStereotype": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "properties":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UProperty.randJson()),
+    };
+  }
+
+
+  static UStereotype fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UStereotype result = new UStereotype._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UStereotype fromJsonMap(Map jsonMap) {
+    UStereotype result = new UStereotype._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    name = jsonMap["name"];
+    // properties list of UProperty
+    properties = new List<UProperty>();
+    jsonMap["properties"].forEach((v) {
+      properties.add(UProperty.fromJsonMap(v));
+    });
+  }
 }
 
-class UTemplBinding { 
+class UTemplBinding {
   UTemplBinding(
     this._id
   ) {
+
+  }
   
+  UTemplBinding._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -408,13 +951,62 @@ class UTemplBinding {
 
 // custom <class UTemplBinding>
 // end <class UTemplBinding>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "signatureId": EBISU_UTILS.toJson(signatureId),
+    "templParmSubsts": EBISU_UTILS.toJson(templParmSubsts),
+    // TODO: "UTemplBinding": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "signatureId": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "templParmSubsts":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UTemplParmSubst.randJson()),
+    };
+  }
+
+
+  static UTemplBinding fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UTemplBinding result = new UTemplBinding._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UTemplBinding fromJsonMap(Map jsonMap) {
+    UTemplBinding result = new UTemplBinding._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    signatureId = jsonMap["signatureId"];
+    // templParmSubsts list of UTemplParmSubst
+    templParmSubsts = new List<UTemplParmSubst>();
+    jsonMap["templParmSubsts"].forEach((v) {
+      templParmSubsts.add(UTemplParmSubst.fromJsonMap(v));
+    });
+  }
 }
 
-class UTemplParmSubst { 
+class UTemplParmSubst {
   UTemplParmSubst(
     this._id
   ) {
+
+  }
   
+  UTemplParmSubst._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -427,13 +1019,56 @@ class UTemplParmSubst {
 
 // custom <class UTemplParmSubst>
 // end <class UTemplParmSubst>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "formalId": EBISU_UTILS.toJson(formalId),
+    "actualId": EBISU_UTILS.toJson(actualId),
+    // TODO: "UTemplParmSubst": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "formalId": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "actualId": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    };
+  }
+
+
+  static UTemplParmSubst fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UTemplParmSubst result = new UTemplParmSubst._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UTemplParmSubst fromJsonMap(Map jsonMap) {
+    UTemplParmSubst result = new UTemplParmSubst._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    formalId = jsonMap["formalId"];
+    actualId = jsonMap["actualId"];
+  }
 }
 
-class UClassifierTemplParm { 
+class UClassifierTemplParm {
   UClassifierTemplParm(
     this._id
   ) {
+
+  }
   
+  UClassifierTemplParm._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -445,13 +1080,59 @@ class UClassifierTemplParm {
 
 // custom <class UClassifierTemplParm>
 // end <class UClassifierTemplParm>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "allowSubstitutable": EBISU_UTILS.toJson(allowSubstitutable),
+    "name": EBISU_UTILS.toJson(name),
+    "type": EBISU_UTILS.toJson(type),
+    // TODO: "UClassifierTemplParm": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "allowSubstitutable": EBISU_UTILS.randJson(_randomJsonGenerator, bool),
+    "name": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "type": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    };
+  }
+
+
+  static UClassifierTemplParm fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UClassifierTemplParm result = new UClassifierTemplParm._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UClassifierTemplParm fromJsonMap(Map jsonMap) {
+    UClassifierTemplParm result = new UClassifierTemplParm._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    allowSubstitutable = jsonMap["allowSubstitutable"];
+    name = jsonMap["name"];
+    type = jsonMap["type"];
+  }
 }
 
-class UTemplSig { 
+class UTemplSig {
   UTemplSig(
     this._id
   ) {
+
+  }
   
+  UTemplSig._json(
+
+  ) {
+
   }
   
   final String _id;
@@ -461,6 +1142,46 @@ class UTemplSig {
 
 // custom <class UTemplSig>
 // end <class UTemplSig>
+
+  Map toJson() {
+    return {
+    "id": EBISU_UTILS.toJson(_id),
+    "parms": EBISU_UTILS.toJson(parms),
+    // TODO: "UTemplSig": super.toJson(),
+    };
+  }
+
+  static Map randJson() {
+    return {
+    "id": EBISU_UTILS.randJson(_randomJsonGenerator, String),
+    "parms":
+       EBISU_UTILS.randJson(_randomJsonGenerator, [],
+        () => UClassifierTemplParm.randJson()),
+    };
+  }
+
+
+  static UTemplSig fromJson(String json) {
+    Map jsonMap = JSON.parse(json);
+    UTemplSig result = new UTemplSig._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  static UTemplSig fromJsonMap(Map jsonMap) {
+    UTemplSig result = new UTemplSig._json();
+    result._fromJsonMapImpl(jsonMap);
+    return result;
+  }
+
+  void _fromJsonMapImpl(Map jsonMap) {
+    _id = jsonMap["id"];
+    // parms list of UClassifierTemplParm
+    parms = new List<UClassifierTemplParm>();
+    jsonMap["parms"].forEach((v) {
+      parms.add(UClassifierTemplParm.fromJsonMap(v));
+    });
+  }
 }
 // custom <part model>
 // end <part model>

@@ -13,7 +13,7 @@ import "package:ebisu/ebisu_dart_meta.dart";
 import "package:xmi/xmi.dart";
 
 /// Pull in the model and generate dart
-class Converter { 
+class Converter {
   Converter(
     this.srcFile,
     this.outPath,
@@ -21,7 +21,7 @@ class Converter {
       this.libraryName
     ]
   ) {
-  
+
   }
   
   /// Path to json input file

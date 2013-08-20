@@ -7,7 +7,7 @@ description: >
   client/server. Once stored in UML the XMI data can be parsed and used to
   generate Dart code. Since Dart does not yet have an XML parser, the approach is
   to pass the model through a XML to JSON converter (_xmi_to_json.rb_) first. 
-  
+
   
   Only a subset of the XMI meta data is defined - just enough to support basic
   classes with properties. Meta data for templates are required for two uml
@@ -18,8 +18,11 @@ description: >
   
 dependencies:
   pathos:  "any"
-  ebisu:
-      path: ../ebisu
+  ebisu_web_ui:
+      git: 
+        url: git://github.com/patefacio/ebisu_web_ui
+        ref: HEAD
+
 # custom <xmi dependencies>
 # end <xmi dependencies>
 

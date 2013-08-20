@@ -3,9 +3,17 @@
 packages:
   ebisu:
     description:
-      path: "/Users/dbdavidson/dev/open_source/codegen/dart/xmi/../ebisu"
-      relative: true
-    source: path
+      ref: null
+      resolved-ref: f535aa58ff18b8331fc21eaa0ccfe039c0f62ca4
+      url: "git://github.com/patefacio/ebisu"
+    source: git
+    version: "0.0.1"
+  ebisu_web_ui:
+    description:
+      ref: HEAD
+      resolved-ref: bcef4ad901a96ca90d0794e6ca8e452e148c1da0
+      url: "git://github.com/patefacio/ebisu_web_ui"
+    source: git
     version: "0.0.1"
   pathos:
     description: pathos
