@@ -4,13 +4,13 @@
 /// 
 library xmi_to_dart;
 
-import "dart:io";
-import "dart:json" as JSON;
-import "package:plus/pprint.dart";
-import "package:pathos/path.dart" as path;
-import "package:ebisu/ebisu_utils.dart" as EBISU_UTILS;
-import "package:ebisu/ebisu_dart_meta.dart";
-import "package:xmi/xmi.dart";
+import 'dart:io';
+import 'dart:json' as JSON;
+import 'package:plus/pprint.dart';
+import 'package:pathos/path.dart' as path;
+import 'package:ebisu/ebisu_utils.dart' as EBISU_UTILS;
+import 'package:ebisu/ebisu_dart_meta.dart';
+import 'package:xmi/xmi.dart';
 
 /// Pull in the model and generate dart
 class Converter {
